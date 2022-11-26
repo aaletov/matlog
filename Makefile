@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -I/usr/local/include
 LDFLAGS = -L/usr/local/lib -lbdd
-objects = build/MathLogic.o
+objects = build/main.o build/conditions.o
 
 all: build/main
 
@@ -10,4 +10,7 @@ build/%.o: %.cpp
 
 build/main: $(objects)
 	$(CXX) $(CXXFLAGS) $(objects) -o build/main $(LDFLAGS)
+
+clean:
+	rm -rf build/*
 
