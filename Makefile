@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -I/usr/local/include
+CXXFLAGS = -I/usr/local/include -std=c++17
 LDFLAGS = -L/usr/local/lib -lbdd
 objects = build/main.o build/conditions.o
 

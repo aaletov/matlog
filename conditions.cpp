@@ -1,13 +1,16 @@
 #include "conditions.hpp"
 
+// Condition 1
 // Object i has Prop k with value j
 bdd propertyIs(const bdd p[M][N][N], const PropertyOfObject objectProp)
 {
 	return p[objectProp.propertyNumber_][objectProp.objectNumber_][objectProp.propertyValue_];
 }
 
-// (Object has Prop k1 with value j1) NAND (Object has Prop k2 with value j2)
-bdd propertyNAND(const bdd p[M][N][N],
+// Condition 2
+// (Object i has Prop k1 with value j1) XNOR (Object i has Prop k2 with value j2)
+// for every i
+bdd propertyEq(const bdd p[M][N][N],
           const PropertyOfObject lObjectProp, 
           const PropertyOfObject rObjectProp)
 {
@@ -23,8 +26,10 @@ bdd propertyNAND(const bdd p[M][N][N],
 	return tree;
 }
 
-// (Current object i has Prop k with value j) NAND (Neighbor of NeighbourType nType ...)
-bdd cond3(const bdd p[M][N][N], 
+// Condition 3
+// (Object i has Prop k with value j) XNOR (Neighbor of NeighbourType nType has Prop k with value j)
+// for every i
+bdd neighbourEq(const bdd p[M][N][N], 
           const NeighbourType nType, 
           const PropertyOfObject currentProperty,
 					PropertyOfObject neighbourProperty)
@@ -42,11 +47,10 @@ bdd cond3(const bdd p[M][N][N],
 
 				bdd a = p[currentProperty.propertyNumber_][i][currentProperty.propertyValue_];
 				int upDiagIndex{};
-
 				if (i < ROW_LENGTH) 
 				{
 					int lastRowIndex = ROW_LENGTH * (ROW_COUNT - 1);
-					upDiagIndex = lastRowIndex + (i - 1);					
+					upDiagIndex = lastRowIndex + ((i % ROW_LENGTH) - 1);
 				} else 
 				{
 					upDiagIndex = i - ROW_LENGTH - 1;
@@ -67,7 +71,6 @@ bdd cond3(const bdd p[M][N][N],
 
 				bdd a = p[currentProperty.propertyNumber_][i][currentProperty.propertyValue_];
 				bdd b = p[neighbourProperty.propertyNumber_][i - 1][neighbourProperty.propertyValue_];
-
 				tree &= !(a ^ b);
 			}
 			break;
@@ -76,29 +79,34 @@ bdd cond3(const bdd p[M][N][N],
 	return tree;
 }
 
-bdd cond4(const bdd p[M][N][N], 
+// Condition 4
+// (Object i has Prop k with value j) XNOR (Neighbor with NeighbourType ANY has Prop k with value j)
+// for every i
+bdd anyNeighboursEq(const bdd p[M][N][N], 
           const PropertyOfObject currentProperty, 
-          const PropertyOfObject neihbourProperty)
+          const PropertyOfObject neighbourProperty)
 {
 	bdd treeTmp = bddfalse;
-	std::vector<NeighbourType> neighbours = {UP, DOWN, RIGHT, LEFT};
+	std::vector<NeighbourType> neighbours = {UPDIAG, LEFT};
 	for (NeighbourType neighbour: neighbours)
 	{
-		treeTmp |= cond3(p, neighbour, currentProperty, neihbourProperty);
+		treeTmp |= neighbourEq(p, neighbour, currentProperty, neighbourProperty);
 	}
 	return treeTmp;
 }
 
-void cond5(bdd &tree, const bdd p[M][N][N])
+// Condition 5
+// (Object i1 has Prop k with value j) NIMPL (Object i2 has Prop k with value j) 
+// for every i1 != i2
+void allPropValuesDistinct(bdd &tree, const bdd p[M][N][N])
 {
-
-	for (unsigned j = 0; j < N; j++)
+	for (int j = 0; j < N; j++)
 	{
-		for (unsigned i = 0; i < N - 1; i++)
+		for (int i = 0; i < N - 1; i++)
 		{
-			for (unsigned k = i + 1; k < N; k++)
+			for (int k = i + 1; k < N; k++)
 			{
-				for (unsigned m = 0; m < M; m++)
+				for (int m = 0; m < M; m++)
 				{
 					tree &= p[m][i][j] >> !p[m][k][j];
 				}
@@ -107,52 +115,22 @@ void cond5(bdd &tree, const bdd p[M][N][N])
 	}
 }
 
-bdd cond6(const bdd p[M][N][N])
+// Condition 6
+// (Object has Prop)
+bdd allPropValuesValid(const bdd p[M][N][N])
 {
 	bdd tree = bddtrue;
 	for (int i = 0; i < N; i++)
 	{
-		for (int k = 0; k < M; ++k)
+		for (int k = 0; k < M; k++)
 		{
-			bdd temp0 = bddfalse;
+			bdd temp = bddfalse;
 			for (int j = 0; j < N; j++)
 			{
-				temp0 |= p[k][i][j];
+				temp |= p[k][i][j];
 			}
-			tree &= temp0;
+			tree &= temp;
 		}
-	}
-	return tree;
-}
-
-bdd cond7(const bdd p[M][N][N])
-{
-	bdd tree = bddtrue;
-	for (int i = 1; i < N; i += 2)
-	{
-		bdd temp = bddfalse;
-		bdd temp1 = bddfalse;
-		for (int j1 = 0; j1 < N && j1 <= K; j1++)
-		{
-			temp1 |= p[0][i][j1];
-			bdd temp2 = bddfalse;
-			for (int j2 = 0; j2 < N && (j1 + j2) <= K; j2++)
-			{
-				temp2 |= p[1][i][j2];
-				bdd temp3 = bddfalse;
-				for (int j3 = 0; j3 < N && (j1 + j2 + j3) <= K; j3++)
-				{
-					temp3 |= p[2][i][j3];
-					bdd temp4 = bddfalse;
-					for (int j4 = 0; j4 < N && (j1 + j2 + j3 + j4) <= K; j4++)
-					{
-						temp4 |= p[3][i][j4];
-					}
-					temp |= temp1 & temp2 & temp3 & temp4;
-				}
-			}
-		}
-		tree &= temp;
 	}
 	return tree;
 }

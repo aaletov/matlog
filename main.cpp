@@ -79,52 +79,61 @@ void program()
 	init(p);
 	bdd tree = bddtrue;
 
-	tree &= cond6(p);
+	tree &= allPropValuesValid(p);
 
-	tree &= propertyIs(p, PropertyOfObject(1, 4, 8)); //+
-	tree &= propertyIs(p, PropertyOfObject(2, 0, 5)); //+
-	tree &= propertyIs(p, PropertyOfObject(3, 2, 5)); //+
+	// tree &= propertyIs(p, PropertyOfObject(1, 4, 8)); //+
+	// tree &= propertyIs(p, PropertyOfObject(2, 0, 5)); //+
+	// tree &= propertyIs(p, PropertyOfObject(3, 2, 5)); //+
 
-	// Дополнительные условия типа 1
+	// Условия типа 1
 	tree &= propertyIs(p, PropertyOfObject(0, 7, 1)); //+
 	tree &= propertyIs(p, PropertyOfObject(2, 3, 1)); //+
 	tree &= propertyIs(p, PropertyOfObject(0, 2, 6)); //+
 	tree &= propertyIs(p, PropertyOfObject(0, 1, 5)); //+
 	tree &= propertyIs(p, PropertyOfObject(2, 8, 6)); //+
 	tree &= propertyIs(p, PropertyOfObject(1, 5, 1)); //+
-	tree &= propertyIs(p, PropertyOfObject(0, 0, 8)); //+
-	tree &= propertyIs(p, PropertyOfObject(3, 6, 6)); //+
+	tree &= propertyIs(p, PropertyOfObject(0, 5, 7));
 
-	tree &= propertyNAND(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 3)); //+
-	tree &= propertyNAND(p, PropertyOfObject(1, -1, 5), PropertyOfObject(3, -1, 3)); //+
+	// Условия типа 2
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(1, -1, 2)); // # 1
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); // # 2
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); // # 3
+	
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(3, -1, 4)); // # 4
+	tree &= propertyEq(p, PropertyOfObject(2, -1, 1), PropertyOfObject(1, -1, 4)); // # 5
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 1), PropertyOfObject(2, -1, 5)); // # 6
+	tree &= propertyEq(p, PropertyOfObject(2, -1, 6), PropertyOfObject(3, -1, 5)); // # 7
+	tree &= propertyEq(p, PropertyOfObject(1, -1, 1), PropertyOfObject(3, -1, 3)); // # 8
 
-	// Дополнительные условия типа 2
-	tree &= tree &= propertyNAND(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); //+
-	tree &= tree &= propertyNAND(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); //+
+	// Условия типа 3
+	tree &= neighbourEq(p, NeighbourType::LEFT, PropertyOfObject(2, -1, 6), PropertyOfObject(3, -1, 2)); // # 9
+	tree &= neighbourEq(p, NeighbourType::LEFT, PropertyOfObject(1, -1, 1), PropertyOfObject(3, -1, 1)); // # 10
+	tree &= neighbourEq(p, NeighbourType::UPDIAG, PropertyOfObject(0, -1, 5), PropertyOfObject(0, -1, 2)); // # 11
+	tree &= neighbourEq(p, NeighbourType::LEFT, PropertyOfObject(0, -1, 5), PropertyOfObject(0, -1, 0)); // # 12
+	tree &= neighbourEq(p, NeighbourType::UPDIAG, PropertyOfObject(3, -1, 1), PropertyOfObject(1, -1, 0)); // # 13
 
-	tree &= cond3(p, NeighbourType::LEFT, PropertyOfObject(0, -1, 7), PropertyOfObject(1, -1, 2)); //+
-	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(1, -1, 8), PropertyOfObject(3, -1, 2)); //+
-	tree &= cond3(p, NeighbourType::UP, PropertyOfObject(3, -1, 7), PropertyOfObject(0, -1, 5)); //+
-	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(2, -1, 4), PropertyOfObject(0, -1, 1)); //+
-	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(2, -1, 7), PropertyOfObject(1, -1, 0)); //+
+	// Условия типа 4
+	tree &= anyNeighboursEq(p, PropertyOfObject(2, -1, 5), PropertyOfObject(0, -1, 2)); //+
+	tree &= anyNeighboursEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(0, -1, 2));
+	tree &= anyNeighboursEq(p, PropertyOfObject(2, -1, 8), PropertyOfObject(2, -1, 5));
 
-	// Дополнительные условия типа 3
-	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(1, -1, 6), PropertyOfObject(2, -1, 0)); //+
-	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(0, -1, 2), PropertyOfObject(0, -1, 4)); //+
-	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(1, -1, 7), PropertyOfObject(3, -1, 2)); //+
+	// Доп. условия типа 2
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 2));
+	tree &= propertyEq(p, PropertyOfObject(1, -1, 0), PropertyOfObject(3, -1, 0));
+	tree &= propertyEq(p, PropertyOfObject(3, -1, 1), PropertyOfObject(2, -1, 3));
+	tree &= propertyEq(p, PropertyOfObject(0, -1, 1), PropertyOfObject(1, -1, 7));
+	tree &= propertyEq(p, PropertyOfObject(3, -1, 3), PropertyOfObject(2, -1, 4));
+	tree &= propertyEq(p, PropertyOfObject(2, -1, 8), PropertyOfObject(1, -1, 5));
+	tree &= propertyEq(p, PropertyOfObject(2, -1, 1), PropertyOfObject(0, -1, 4));
+	tree &= propertyEq(p, PropertyOfObject(2, -1, 8), PropertyOfObject(3, -1, 7));
 
-	tree &= cond7(p);
+	// Доп. условия типа 3
+	tree &= neighbourEq(p, NeighbourType::LEFT, PropertyOfObject(2, -1, 5), PropertyOfObject(3, -1, 6)); // 
+	tree &= neighbourEq(p, NeighbourType::UPDIAG, PropertyOfObject(2, -1, 6), PropertyOfObject(0, -1, 3)); //
+	tree &= neighbourEq(p, NeighbourType::UPDIAG, PropertyOfObject(0, -1, 5), PropertyOfObject(1, -1, 3)); //
+	tree &= neighbourEq(p, NeighbourType::UPDIAG, PropertyOfObject(3, -1, 5), PropertyOfObject(1, -1, 6)); //
 
-	tree &= cond4(p, PropertyOfObject(0, -1, 4), PropertyOfObject(1, -1, 0)); //+
-	tree &= cond4(p, PropertyOfObject(0, -1, 8), PropertyOfObject(1, -1, 2)); //+
-	tree &= cond4(p, PropertyOfObject(2, -1, 4), PropertyOfObject(3, -1, 4)); //+
-	tree &= cond4(p, PropertyOfObject(2, -1, 6), PropertyOfObject(1, -1, 1)); //+
-	tree &= cond4(p, PropertyOfObject(3, -1, 0), PropertyOfObject(0, -1, 8)); //+
-
-	// Дополнительные условия типа 4
-	tree &= cond4(p, PropertyOfObject(2, -1, 5), PropertyOfObject(3, -1, 1)); //+
-
-	cond5(tree, p);
+	allPropValuesDistinct(tree, p);
 
 	std::cout << bdd_satcount(tree) << " solution(s):\n";
 	bdd_allsat(tree, fun);
