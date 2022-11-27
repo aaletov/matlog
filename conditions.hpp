@@ -24,7 +24,7 @@ namespace fourthTypeCond
 }
 
 bdd propertyIs(const bdd p[M][N][N], const PropertyOfObject propertyOfObject);
-bdd propertyImplic(const bdd p[M][N][N], 
+bdd propertyNAND(const bdd p[M][N][N], 
 					const PropertyOfObject propertyOfObject1, 
 					const PropertyOfObject propertyOfObject2);
 bdd cond3(const bdd p[M][N][N], const NeighbourType neighbour, const PropertyOfObject currentProperty,

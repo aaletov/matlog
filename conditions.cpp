@@ -7,7 +7,7 @@ bdd propertyIs(const bdd p[M][N][N], const PropertyOfObject objectProp)
 }
 
 // (Object has Prop k1 with value j1) NAND (Object has Prop k2 with value j2)
-bdd propertyImplic(const bdd p[M][N][N],
+bdd propertyNAND(const bdd p[M][N][N],
           const PropertyOfObject lObjectProp, 
           const PropertyOfObject rObjectProp)
 {

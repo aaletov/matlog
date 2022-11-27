@@ -95,12 +95,12 @@ void program()
 	tree &= propertyIs(p, PropertyOfObject(0, 0, 8)); //+
 	tree &= propertyIs(p, PropertyOfObject(3, 6, 6)); //+
 
-	tree &= propertyImplic(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 3)); //+
-	tree &= propertyImplic(p, PropertyOfObject(1, -1, 5), PropertyOfObject(3, -1, 3)); //+
+	tree &= propertyNAND(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 3)); //+
+	tree &= propertyNAND(p, PropertyOfObject(1, -1, 5), PropertyOfObject(3, -1, 3)); //+
 
 	// Дополнительные условия типа 2
-	tree &= tree &= propertyImplic(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); //+
-	tree &= tree &= propertyImplic(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); //+
+	tree &= tree &= propertyNAND(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); //+
+	tree &= tree &= propertyNAND(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); //+
 
 	tree &= cond3(p, NeighbourType::LEFT, PropertyOfObject(0, -1, 7), PropertyOfObject(1, -1, 2)); //+
 	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(1, -1, 8), PropertyOfObject(3, -1, 2)); //+
