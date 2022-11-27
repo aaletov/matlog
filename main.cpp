@@ -73,7 +73,7 @@ void fun(char *varset, int size)
 void program()
 {
 
-	bdd_init(50000000, 7000000);
+	bdd_init(100000000, 10000000);
 	bdd_setvarnum(VAR_NUM);
 	bdd p[M][N][N];
 	init(p);

@@ -126,6 +126,106 @@ bdd cond6(const bdd p[M][N][N])
 	return tree;
 }
 
+int getLeft(int i) {
+	if (i % ROW_LENGTH == 0) {
+		return -1;
+	}
+
+	return i - 1;
+}
+
+int getRight(int i) {
+	if ((i % ROW_LENGTH) == (ROW_LENGTH - 1)) {
+		return -1;
+	}
+
+	return i + 1;
+}
+
+int getUp(int i) {
+	if (i < ROW_LENGTH) {
+		return -1;
+	}
+
+	return i - ROW_LENGTH;
+}
+
+int getDown(int i) {
+	if (i >= ROW_LENGTH * (ROW_COUNT - 1)) {
+		return -1;
+	}
+
+	return i + ROW_LENGTH;
+}
+
+int setNextJ(std::vector<int>& jarr) {
+	for (int i = 0; i < jarr.size(); i++) {
+		if (jarr[i] + 1 <= K) {
+			jarr[i]++;
+			break;
+		} else {
+			if (i == jarr.size() - 1) {
+				return -1;
+			}
+			jarr[i] = 0;
+			continue;
+		}
+	}	
+	// std::cout << "jarr len: " << jarr.size() << " next j return:" << 
+	// 			" " << jarr[0] <<
+	// 			" " << jarr[1] <<
+	// 			" " << jarr[2] <<
+	// 			" " << jarr[3] <<
+	// 			" " << jarr[4] << std::endl;
+	return 0;
+}
+
+int setNextValidJ(std::vector<int>& jarr) {
+	while (setNextJ(jarr) != -1) {
+		int sum = 0;
+		for (int i = 0; i < jarr.size(); i++) {
+			sum += jarr[i];
+		}
+		if (sum <= K) {
+			// std::cout << "next valid j return: " << 
+			 
+			return 0;
+		}	
+	}
+	std::cout << "next j returned -1" << std::endl;
+	return -1;
+}
+
+bdd cond7(const bdd p[M][N][N])
+{
+	bdd tree = bddfalse;
+	for (int i = 0; i < N; i++) {
+		std::vector<int> cells = {i, getLeft(i), getRight(i), getUp(i), getDown(i)};
+		std::vector<int> validCells{};
+		for (int& cellI: cells) {
+			if (cellI != -1) {
+				validCells.push_back(cellI);
+			}
+		}
+		for (int k = 0; k < M; k++) {
+			std::vector<int> validJ(validCells.size(), 0); 
+			do {
+				std::cout << "building tree" << std::endl;
+				std::cout << "validJ.size(): " << validJ.size() << std::endl;
+				bdd subTree = bddtrue;
+				for (int m = 0; m < validJ.size(); m++) {
+					subTree &= p[k][validCells[m]][validJ[m]];
+				}
+				tree |= subTree;
+				std::cout << bdd_satcount(tree) << std::endl;
+			} while(setNextValidJ(validJ) != -1);
+		}
+	}
+
+	return tree;
+}
+
+
 bdd cond7(const bdd p[M][N][N])
 {
 	bdd tree = bddtrue;

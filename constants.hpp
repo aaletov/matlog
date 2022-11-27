@@ -19,7 +19,9 @@ const inline std::size_t K = 8;
 const inline int LOG_N = static_cast<int>(std::ceil(std::log2(N)));;
 
 // ??
-const inline std::size_t VAR_NUM = 144;
+const inline std::size_t VAR_NUM = N * M * LOG_N;
 char inline var[N];
+
+const inline std::size_t ROW_COUNT = N / ROW_LENGTH;
 
 #endif
