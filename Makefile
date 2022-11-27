@@ -17,3 +17,11 @@ run:
 clean:
 	rm -rf build/*
 
+install-buddy:
+	wget https://sourceforge.net/projects/buddy/files/latest/download
+	tar -xzf download
+	rm download
+
+	cd ./buddy-2.4 && ./configure && make && sudo make install
+	rm -rf buddy-2.4
+
