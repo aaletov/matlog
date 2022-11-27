@@ -11,6 +11,9 @@ build/%.o: %.cpp
 build/main: $(objects)
 	$(CXX) $(CXXFLAGS) $(objects) -o build/main $(LDFLAGS)
 
+run:
+	./build/main
+
 clean:
 	rm -rf build/*
 

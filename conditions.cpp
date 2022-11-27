@@ -1,35 +1,45 @@
 #include "conditions.hpp"
 
-bdd cond1(const bdd p[M][N][N], const PropertyOfObject propertyOfObject)
+// Object i has Prop k with value j
+bdd propertyIs(const bdd p[M][N][N], const PropertyOfObject objectProp)
 {
-	return p[propertyOfObject.propertyNumber_][propertyOfObject.objectNumber_][propertyOfObject.propertyValue_];
+	return p[objectProp.propertyNumber_][objectProp.objectNumber_][objectProp.propertyValue_];
 }
 
-bdd cond2(const bdd p[M][N][N],
-          const PropertyOfObject propertyOfObject1, 
-          const PropertyOfObject propertyOfObject2)
+// (Object has Prop k1 with value j1) NAND (Object has Prop k2 with value j2)
+bdd propertyImplic(const bdd p[M][N][N],
+          const PropertyOfObject lObjectProp, 
+          const PropertyOfObject rObjectProp)
 {
 	bdd tree = bddtrue;
 	for (int i = 0; i < N; ++i)
 	{
-		tree &= !(p[propertyOfObject1.propertyNumber_][i][propertyOfObject1.propertyValue_] ^ p[propertyOfObject2.propertyNumber_][i][propertyOfObject2.propertyValue_]);
+    bdd a = p[lObjectProp.propertyNumber_][i][lObjectProp.propertyValue_];
+    bdd b = p[rObjectProp.propertyNumber_][i][rObjectProp.propertyValue_];
+
+    tree &= !(a ^ b);
 	}
+
 	return tree;
 }
 
+// (Current object i has Prop k with value j) NAND (Neighbor of NeighbourType nType ...)
 bdd cond3(const bdd p[M][N][N], 
-          const Neighbour neighbour, 
+          const NeighbourType nType, 
           const PropertyOfObject currentProperty,
 					PropertyOfObject neihbourProperty)
 {
 	bdd tree = bddtrue;
-	switch (neighbour)
+	switch (nType)
 	{
 		case UP:
 		{
 			for (int i = 0; i < N - ROW_LENGTH; ++i)
 			{
-				tree &= !(p[currentProperty.propertyNumber_][i + ROW_LENGTH][currentProperty.propertyValue_] ^ p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_]);
+        bdd a = p[currentProperty.propertyNumber_][i + ROW_LENGTH][currentProperty.propertyValue_];
+        bdd b = p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_];
+
+				tree &= !(a ^ b);
 			}
 			break;
 		}
@@ -72,8 +82,8 @@ bdd cond4(const bdd p[M][N][N],
           const PropertyOfObject neihbourProperty)
 {
 	bdd treeTmp = bddfalse;
-	std::vector<Neighbour> neighbours = {UP, DOWN, RIGHT, LEFT};
-	for (Neighbour neighbour: neighbours)
+	std::vector<NeighbourType> neighbours = {UP, DOWN, RIGHT, LEFT};
+	for (NeighbourType neighbour: neighbours)
 	{
 		treeTmp |= cond3(p, neighbour, currentProperty, neihbourProperty);
 	}

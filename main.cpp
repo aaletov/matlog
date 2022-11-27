@@ -81,37 +81,37 @@ void program()
 
 	tree &= cond6(p);
 
-	tree &= cond1(p, PropertyOfObject(1, 4, 8)); //+
-	tree &= cond1(p, PropertyOfObject(2, 0, 5)); //+
-	tree &= cond1(p, PropertyOfObject(3, 2, 5)); //+
+	tree &= propertyIs(p, PropertyOfObject(1, 4, 8)); //+
+	tree &= propertyIs(p, PropertyOfObject(2, 0, 5)); //+
+	tree &= propertyIs(p, PropertyOfObject(3, 2, 5)); //+
 
 	// Дополнительные условия типа 1
-	tree &= cond1(p, PropertyOfObject(0, 7, 1)); //+
-	tree &= cond1(p, PropertyOfObject(2, 3, 1)); //+
-	tree &= cond1(p, PropertyOfObject(0, 2, 6)); //+
-	tree &= cond1(p, PropertyOfObject(0, 1, 5)); //+
-	tree &= cond1(p, PropertyOfObject(2, 8, 6)); //+
-	tree &= cond1(p, PropertyOfObject(1, 5, 1)); //+
-	tree &= cond1(p, PropertyOfObject(0, 0, 8)); //+
-	tree &= cond1(p, PropertyOfObject(3, 6, 6)); //+
+	tree &= propertyIs(p, PropertyOfObject(0, 7, 1)); //+
+	tree &= propertyIs(p, PropertyOfObject(2, 3, 1)); //+
+	tree &= propertyIs(p, PropertyOfObject(0, 2, 6)); //+
+	tree &= propertyIs(p, PropertyOfObject(0, 1, 5)); //+
+	tree &= propertyIs(p, PropertyOfObject(2, 8, 6)); //+
+	tree &= propertyIs(p, PropertyOfObject(1, 5, 1)); //+
+	tree &= propertyIs(p, PropertyOfObject(0, 0, 8)); //+
+	tree &= propertyIs(p, PropertyOfObject(3, 6, 6)); //+
 
-	tree &= cond2(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 3)); //+
-	tree &= cond2(p, PropertyOfObject(1, -1, 5), PropertyOfObject(3, -1, 3)); //+
+	tree &= propertyImplic(p, PropertyOfObject(0, -1, 0), PropertyOfObject(2, -1, 3)); //+
+	tree &= propertyImplic(p, PropertyOfObject(1, -1, 5), PropertyOfObject(3, -1, 3)); //+
 
 	// Дополнительные условия типа 2
-	tree &= tree &= cond2(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); //+
-	tree &= tree &= cond2(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); //+
+	tree &= tree &= propertyImplic(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); //+
+	tree &= tree &= propertyImplic(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); //+
 
-	tree &= cond3(p, Neighbour::LEFT, PropertyOfObject(0, -1, 7), PropertyOfObject(1, -1, 2)); //+
-	tree &= cond3(p, Neighbour::RIGHT, PropertyOfObject(1, -1, 8), PropertyOfObject(3, -1, 2)); //+
-	tree &= cond3(p, Neighbour::UP, PropertyOfObject(3, -1, 7), PropertyOfObject(0, -1, 5)); //+
-	tree &= cond3(p, Neighbour::DOWN, PropertyOfObject(2, -1, 4), PropertyOfObject(0, -1, 1)); //+
-	tree &= cond3(p, Neighbour::RIGHT, PropertyOfObject(2, -1, 7), PropertyOfObject(1, -1, 0)); //+
+	tree &= cond3(p, NeighbourType::LEFT, PropertyOfObject(0, -1, 7), PropertyOfObject(1, -1, 2)); //+
+	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(1, -1, 8), PropertyOfObject(3, -1, 2)); //+
+	tree &= cond3(p, NeighbourType::UP, PropertyOfObject(3, -1, 7), PropertyOfObject(0, -1, 5)); //+
+	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(2, -1, 4), PropertyOfObject(0, -1, 1)); //+
+	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(2, -1, 7), PropertyOfObject(1, -1, 0)); //+
 
 	// Дополнительные условия типа 3
-	tree &= cond3(p, Neighbour::RIGHT, PropertyOfObject(1, -1, 6), PropertyOfObject(2, -1, 0)); //+
-	tree &= cond3(p, Neighbour::DOWN, PropertyOfObject(0, -1, 2), PropertyOfObject(0, -1, 4)); //+
-	tree &= cond3(p, Neighbour::DOWN, PropertyOfObject(1, -1, 7), PropertyOfObject(3, -1, 2)); //+
+	tree &= cond3(p, NeighbourType::RIGHT, PropertyOfObject(1, -1, 6), PropertyOfObject(2, -1, 0)); //+
+	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(0, -1, 2), PropertyOfObject(0, -1, 4)); //+
+	tree &= cond3(p, NeighbourType::DOWN, PropertyOfObject(1, -1, 7), PropertyOfObject(3, -1, 2)); //+
 
 	tree &= cond7(p);
 
