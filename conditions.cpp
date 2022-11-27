@@ -27,49 +27,48 @@ bdd propertyNAND(const bdd p[M][N][N],
 bdd cond3(const bdd p[M][N][N], 
           const NeighbourType nType, 
           const PropertyOfObject currentProperty,
-					PropertyOfObject neihbourProperty)
+					PropertyOfObject neighbourProperty)
 {
 	bdd tree = bddtrue;
 	switch (nType)
 	{
-		case UP:
+		case UPDIAG:
 		{
-			for (int i = 0; i < N - ROW_LENGTH; ++i)
+			for (int i = 1; i < N; i++)
 			{
-        bdd a = p[currentProperty.propertyNumber_][i + ROW_LENGTH][currentProperty.propertyValue_];
-        bdd b = p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_];
+				if (i % ROW_LENGTH == 0) {
+					continue;
+				}
 
+				bdd a = p[currentProperty.propertyNumber_][i][currentProperty.propertyValue_];
+				int upDiagIndex{};
+
+				if (i < ROW_LENGTH) 
+				{
+					int lastRowIndex = ROW_LENGTH * (ROW_COUNT - 1);
+					upDiagIndex = lastRowIndex + (i - 1);					
+				} else 
+				{
+					upDiagIndex = i - ROW_LENGTH - 1;
+				}
+
+        bdd b = p[neighbourProperty.propertyNumber_][upDiagIndex][neighbourProperty.propertyValue_];
 				tree &= !(a ^ b);
-			}
-			break;
-		}
-		case DOWN:
-		{
-			for (int i = ROW_LENGTH; i < N; ++i)
-			{
-				tree &= (!p[currentProperty.propertyNumber_][i - ROW_LENGTH][currentProperty.propertyValue_] ^ p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_]);
 			}
 			break;
 		}
 		case LEFT:
 		{
-			for (int i = 0; i < N; ++i)
+			for (int i = 1; i < N; i++)
 			{
-				if ((i + 1) % ROW_LENGTH != 0)
-				{
-					tree &= !(p[currentProperty.propertyNumber_][i + 1][currentProperty.propertyValue_] ^ p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_]);
+				if (i % ROW_LENGTH == 0) {
+					continue;
 				}
-			}
-			break;
-		}
-		case RIGHT:
-		{
-			for (int i = 0; i < N; ++i)
-			{
-				if (i % ROW_LENGTH != 0)
-				{
-					tree &= !(p[currentProperty.propertyNumber_][i - 1][currentProperty.propertyValue_] ^ p[neihbourProperty.propertyNumber_][i][neihbourProperty.propertyValue_]);
-				}
+
+				bdd a = p[currentProperty.propertyNumber_][i][currentProperty.propertyValue_];
+				bdd b = p[neighbourProperty.propertyNumber_][i - 1][neighbourProperty.propertyValue_];
+
+				tree &= !(a ^ b);
 			}
 			break;
 		}

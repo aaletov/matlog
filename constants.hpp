@@ -12,6 +12,9 @@ const inline std::size_t M = 4;
 // ROW_LENGTH is the length of one row
 const inline std::size_t ROW_LENGTH = 3;
 
+// ROW_COUNT is the count of rows
+const inline std::size_t ROW_COUNT = N / ROW_LENGTH;
+
 // Constant for 7'th condition. Sum of neighbour-object's properties MUST be more than K
 const inline std::size_t K = 8;
 
