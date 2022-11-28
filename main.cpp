@@ -81,10 +81,6 @@ void program()
 
 	tree &= allPropValuesValid(p);
 
-	// tree &= propertyIs(p, PropertyOfObject(1, 4, 8)); //+
-	// tree &= propertyIs(p, PropertyOfObject(2, 0, 5)); //+
-	// tree &= propertyIs(p, PropertyOfObject(3, 2, 5)); //+
-
 	// Условия типа 1
 	tree &= propertyIs(p, PropertyOfObject(0, 7, 1)); //+
 	tree &= propertyIs(p, PropertyOfObject(2, 3, 1)); //+
@@ -98,7 +94,6 @@ void program()
 	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(1, -1, 2)); // # 1
 	tree &= propertyEq(p, PropertyOfObject(0, -1, 6), PropertyOfObject(2, -1, 8)); // # 2
 	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(2, -1, 0)); // # 3
-	
 	tree &= propertyEq(p, PropertyOfObject(0, -1, 5), PropertyOfObject(3, -1, 4)); // # 4
 	tree &= propertyEq(p, PropertyOfObject(2, -1, 1), PropertyOfObject(1, -1, 4)); // # 5
 	tree &= propertyEq(p, PropertyOfObject(0, -1, 1), PropertyOfObject(2, -1, 5)); // # 6
@@ -137,7 +132,6 @@ void program()
 
 	std::cout << bdd_satcount(tree) << " solution(s):\n";
 	bdd_allsat(tree, fun);
-	// std::cout << tree << "\n";
 	bdd_done();
 }
 

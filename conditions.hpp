@@ -7,22 +7,6 @@
 #include "neighbour.hpp"
 #include "constants.hpp"
 
-namespace firstTypeCond 
-{
-}
-
-namespace secTypeCond 
-{
-}
-
-namespace thirdTypeCond
-{
-}
-
-namespace fourthTypeCond
-{
-}
-
 bdd propertyIs(const bdd p[M][N][N], const PropertyOfObject propertyOfObject);
 bdd propertyEq(const bdd p[M][N][N], 
 					const PropertyOfObject propertyOfObject1, 
